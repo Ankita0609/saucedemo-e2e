@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="SauceDemo E2E Suite" verbose="1">
-  <test name="E2ECheckoutTest">
-    <classes>
-      <class name="tests.E2ECheckoutTest"/>
-    </classes>
-  </test>
-</suite>

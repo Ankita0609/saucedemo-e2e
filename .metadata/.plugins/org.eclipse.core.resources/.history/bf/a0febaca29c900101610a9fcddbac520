@@ -1,8 +1,0 @@
-baseUrl=https://www.saucedemo.com/
-username=standard_user
-password=secret_sauce
-browser=chrome
-headless=false
-implicitWait=10
-pageLoadTimeout=30
-screenshotDir=test-output/screenshots

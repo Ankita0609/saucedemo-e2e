@@ -63,7 +63,7 @@
 		<item key="index" value="3"/>
 	</section>
 	<section name="RefactoringWizard.preview">
-		<item key="width" value="600"/>
+		<item key="width" value="630"/>
 		<item key="height" value="400"/>
 	</section>
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
@@ -72,5 +72,26 @@
 		<item key="updateTextualMatches" value="false"/>
 		<item key="updateQualifiedNames" value="false"/>
 		<item key="patterns" value="*"/>
+	</section>
+	<section name="NewAnnotationCreationWizard.dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="618"/>
+		<item key="DIALOG_Y_ORIGIN" value="42"/>
+		<item key="DIALOG_WIDTH" value="703"/>
+		<item key="DIALOG_HEIGHT" value="716"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+	<section name="NewAnnotationWizardPage">
+		<item key="add_documented" value="false"/>
+		<section name="AddRetention">
+			<item key="enabled" value="false"/>
+			<list key="selectedEnums">
+				<item value="CLASS"/>
+			</list>
+		</section>
+		<section name="AddTarget">
+			<item key="enabled" value="false"/>
+			<list key="selectedEnums">
+			</list>
+		</section>
 	</section>
 </section>

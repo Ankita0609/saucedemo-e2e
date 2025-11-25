@@ -46,12 +46,14 @@
 	</section>
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
+			<item value="ecommerce-automation"/>
 			<item value="ecommerceAutomation21"/>
 			<item value="NewMavenProject21"/>
 		</list>
 		<list key="name">
 		</list>
 		<list key="artifactId">
+			<item value="ecommerce-automation"/>
 			<item value="ecommerceAutomation21"/>
 			<item value="NewMavenProject21"/>
 		</list>
@@ -78,5 +80,18 @@
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.dependencies">
+	</section>
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="C:\Users\ankit\Downloads\saucedemo_e2e"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
 	</section>
 </section>
