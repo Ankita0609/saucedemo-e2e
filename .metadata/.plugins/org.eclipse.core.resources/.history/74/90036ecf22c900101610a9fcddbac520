@@ -1,0 +1,63 @@
+package tests;
+
+import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.*;
+import utils.ConfigReader;
+
+public class E2ECheckoutTest extends BaseTest {
+
+    @Test
+    public void verifyEndToEndCheckoutFlow() {
+        // use config values so you don't hardcode credentials
+        String username = ConfigReader.get("username");
+        String password = ConfigReader.get("password");
+
+        // 1. Open app
+        driver.get(ConfigReader.get("baseUrl"));
+
+        // 2. Login
+        LoginPage loginPage = new LoginPage(driver);
+        InventoryPage inventoryPage = loginPage.loginAs(username, password);
+
+        // basic check: we expect to land on inventory/products page
+        Assert.assertNotNull(inventoryPage, "Login failed - InventoryPage is null after login.");
+
+        // 3. Open first product
+        ProductPage productPage = inventoryPage.clickFirstProduct();
+        Assert.assertNotNull(productPage, "Failed to open product page.");
+
+        // 4. Add product to cart
+        productPage.addToCart();
+
+        // 5. Go to cart
+        CartPage cartPage = productPage.goToCart();
+        Assert.assertNotNull(cartPage, "Failed to navigate to Cart page.");
+
+        // 6. Click Checkout (CartPage.clickCheckout handles popup if present and waits for navigation)
+        CheckoutPage checkoutPage = cartPage.clickCheckout();
+        Assert.assertNotNull(checkoutPage, "Failed to navigate to Checkout page.");
+
+        // 7. Fill checkout information (firstName, lastName, postalCode)
+        checkoutPage.fillInformation("John", "Doe", "12345");
+
+        // 8. Continue to overview
+        CheckoutOverviewPage overviewPage = checkoutPage.clickContinue();
+        Assert.assertNotNull(overviewPage, "Failed to navigate to Checkout Overview page.");
+
+        // 9. Finish order
+        CheckoutCompletePage completePage = overviewPage.clickFinish();
+        Assert.assertNotNull(completePage, "Failed to complete checkout.");
+
+        // 10. Validate success message (case-insensitive contains check)
+        String successMessage = completePage.getSuccessMessage();
+        Assert.assertNotNull(successMessage, "Success message was null.");
+        Assert.assertTrue(
+            successMessage.toLowerCase().contains("thank"),
+            "Unexpected success message: " + successMessage
+        );
+
+        System.out.println("E2ECheckoutTest PASSED — success message: " + successMessage);
+    }
+}

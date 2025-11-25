@@ -1,0 +1,51 @@
+package pages;
+
+
+import base.BasePage;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+
+public class InventoryPage extends BasePage {
+
+
+private final By productsTitle = By.cssSelector(".title");
+private final By firstProductName = By.cssSelector(".inventory_item:first-of-type .inventory_item_name");
+
+
+public InventoryPage(WebDriver driver) {
+super(driver);
+}
+
+
+public boolean isOnProductsPage() {
+try {
+return waitForVisible(productsTitle, 5) != null;
+} catch (Exception e) {
+return false;
+}
+}
+
+
+public ProductPage clickFirstProduct() {
+WebElement el = driver.findElement(firstProductName);
+scrollIntoView(el);
+el.click();
+return new ProductPage(driver);
+}
+
+
+public ProductPage openProduct(String productName) {
+// fallback: click first product if specific not found
+try {
+By productBy = By.xpath("//div[contains(@class,'inventory_item')]//div[text()='" + productName + "']");
+WebElement el = waitForVisible(productBy, 5);
+scrollIntoView(el);
+el.click();
+return new ProductPage(driver);
+} catch (Exception e) {
+return clickFirstProduct();
+}
+}
+}

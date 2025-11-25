@@ -1,0 +1,20 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import utils.TestUtil;
+
+public class CartPage {
+
+    private final WebDriver driver;
+    private final By checkoutBtn = By.id("checkout");
+
+    public CartPage(WebDriver driver) { this.driver = driver; }
+
+    public void clickCheckout() {
+        WebElement btn = driver.findElement(checkoutBtn);
+        TestUtil.scrollIntoView(driver, btn);
+        btn.click();
+    }
+}

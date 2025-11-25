@@ -1,0 +1,45 @@
+package pages;
+
+public class CheckoutPage {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		package pages;
+
+		import org.openqa.selenium.By;
+		import org.openqa.selenium.WebDriver;
+
+		public class CheckoutPage {
+
+		    WebDriver driver;
+
+		    By name = By.id("name");
+		    By address = By.id("address");
+		    By city = By.id("city");
+		    By zip = By.id("zip");
+		    By placeOrderBtn = By.id("placeOrder");
+		    By successMessage = By.id("successMsg");
+
+		    public CheckoutPage(WebDriver driver) {
+		        this.driver = driver;
+		    }
+
+		    public void fillAddress(String username, String addr, String c, String z) {
+		        driver.findElement(name).sendKeys(username);
+		        driver.findElement(address).sendKeys(addr);
+		        driver.findElement(city).sendKeys(c);
+		        driver.findElement(zip).sendKeys(z);
+		    }
+
+		    public void placeOrder() {
+		        driver.findElement(placeOrderBtn).click();
+		    }
+
+		    public String getSuccessMessage() {
+		        return driver.findElement(successMessage).getText();
+		    }
+		}
+
+	}
+
+}

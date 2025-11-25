@@ -1,0 +1,62 @@
+package driver;
+
+
+public class DriverManager {
+
+
+private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+
+
+public static WebDriver getDriver() {
+return driver.get();
+}
+
+
+public static void initDriver(String browser, boolean headless) {
+if (driver.get() != null) return;
+
+
+if ("firefox".equalsIgnoreCase(browser)) {
+WebDriverManager.firefoxdriver().setup();
+FirefoxOptions options = new FirefoxOptions();
+if (headless) options.addArguments("-headless");
+driver.set(new FirefoxDriver(options));
+} else {
+WebDriverManager.chromedriver().setup();
+ChromeOptions options = new ChromeOptions();
+
+
+// disable Chrome password manager and save-password prompt
+Map<String, Object> prefs = new HashMap<>();
+prefs.put("credentials_enable_service", false);
+prefs.put("profile.password_manager_enabled", false);
+options.setExperimentalOption("prefs", prefs);
+
+
+options.addArguments("--disable-popup-blocking");
+options.addArguments("--disable-save-password-bubble");
+options.addArguments("--disable-features=PasswordManagerEnabled");
+
+
+if (headless) {
+options.addArguments("--headless=new");
+options.addArguments("--no-sandbox");
+options.addArguments("--disable-dev-shm-usage");
+}
+
+
+driver.set(new ChromeDriver(options));
+}
+
+
+driver.get().manage().window().maximize();
+}
+
+
+public static void quitDriver() {
+if (driver.get() != null) {
+try { driver.get().quit(); } catch (Exception ignored) {}
+driver.remove();
+}
+}
+}

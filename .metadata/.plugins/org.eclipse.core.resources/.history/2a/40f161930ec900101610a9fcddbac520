@@ -1,0 +1,21 @@
+package pages;
+
+
+import driver.DriverManager;
+import org.openqa.selenium.By;
+
+public class LoginPage {
+
+	private By usernameField = By.id("user-name");
+	private By passwordField = By.id("password");
+	private By loginButton = By.id("login-button");
+
+
+	public void login(String username, String password) {
+	DriverManager.getDriver().findElement(usernameField).sendKeys(username);
+	DriverManager.getDriver().findElement(passwordField).sendKeys(password);
+	DriverManager.getDriver().findElement(loginButton).click();
+
+	}
+
+}

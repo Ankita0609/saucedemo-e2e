@@ -1,0 +1,24 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class HomePage {
+
+    WebDriver driver;
+    By searchBox = By.id("searchBox");
+    By searchBtn = By.id("searchButton");
+
+    public HomePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void goToHomePage() {
+        driver.get("https://your-ecommerce-site.com");
+    }
+
+    public void searchProduct(String item) {
+        driver.findElement(searchBox).sendKeys(item);
+        driver.findElement(searchBtn).click();
+    }
+}

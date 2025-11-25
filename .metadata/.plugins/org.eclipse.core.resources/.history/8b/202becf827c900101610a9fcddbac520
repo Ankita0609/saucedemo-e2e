@@ -1,0 +1,71 @@
+package base;
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+
+import java.time.Duration;
+
+
+public class BasePage {
+
+
+protected WebDriver driver;
+private final int defaultWait = 10; // seconds
+
+
+public BasePage(WebDriver driver) {
+this.driver = driver;
+}
+
+
+protected WebElement waitForVisible(By locator, int seconds) {
+return new WebDriverWait(driver, Duration.ofSeconds(seconds))
+.until(ExpectedConditions.visibilityOfElementLocated(locator));
+}
+
+
+protected void scrollIntoView(WebElement element) {
+((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+}
+
+
+public void handlePasswordPopupIfPresent() {
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+try {
+// 1) try JS alert
+wait.until(ExpectedConditions.alertIsPresent());
+driver.switchTo().alert().accept();
+System.out.println("Handled JS alert");
+return;
+} catch (Exception ignored) {}
+
+
+// 2) Try common HTML OK locators
+By[] okLocators = new By[] {
+By.xpath("//button[normalize-space(.)='OK']"),
+By.xpath("//button[normalize-space(.)='Ok']"),
+By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'ok')]")
+};
+
+
+for (By loc : okLocators) {
+try {
+WebElement ok = wait.until(ExpectedConditions.elementToBeClickable(loc));
+((JavascriptExecutor) driver).executeScript("arguments[0].click();", ok);
+System.out.println("Clicked HTML OK button");
+return;
+} catch (TimeoutException ignored) {}
+}
+
+
+// 3) fallback: nothing found
+System.out.println("No popup detected by handler");
+}
+}

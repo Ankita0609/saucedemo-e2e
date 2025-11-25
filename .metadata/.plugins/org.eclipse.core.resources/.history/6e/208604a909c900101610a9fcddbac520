@@ -1,0 +1,6 @@
+baseUrl=http://localhost/opencart/upload/
+browser=chrome
+implicitWait=10
+pageLoadTimeout=20
+username=pavanoltraining@gmail.com
+password=test@123

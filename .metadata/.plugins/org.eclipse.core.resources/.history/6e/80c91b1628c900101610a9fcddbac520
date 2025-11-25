@@ -1,0 +1,56 @@
+package tests;
+
+
+import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+import pages.*;
+import utils.ConfigReader;
+import utils.TestListener;
+
+
+@Listeners(TestListener.class)
+public class E2ECheckoutTest extends BaseTest {
+
+
+@Test
+public void verifyEndToEndCheckoutFlow() {
+// open url (BaseTest already navigates to baseUrl, but ensure)
+driver.get(ConfigReader.get("baseUrl"));
+
+
+LoginPage login = new LoginPage(driver);
+InventoryPage inventory = login.loginAs(
+ConfigReader.get("username"),
+ConfigReader.get("password")
+);
+
+
+Assert.assertTrue(inventory.isOnProductsPage(), "Login/Inventory page not loaded");
+
+
+ProductPage product = inventory.clickFirstProduct();
+product.addToCart();
+
+
+CartPage cart = product.goToCart();
+CheckoutPage checkout = cart.clickCheckout();
+
+
+checkout.fillInformation("John", "Doe", "12345");
+CheckoutOverviewPage overview = checkout.clickContinue();
+
+
+Assert.assertTrue(overview.isOnOverviewPage(), "Overview page not loaded");
+
+
+CheckoutCompletePage complete = overview.clickFinish();
+String success = complete.getSuccessMessage();
+Assert.assertTrue(success != null && success.toLowerCase().contains("thank"),
+"Order not completed - success message: " + success);
+
+
+System.out.println("E2E flow completed. Message: " + success);
+}
+}

@@ -1,0 +1,23 @@
+package utils;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class PopupHandler {
+
+    // Handles the "Change your password" Google popup
+    public static void dismissGooglePasswordWarning(WebDriver driver) {
+
+        try {
+            Thread.sleep(1500); // allow popup to appear
+
+            WebElement okBtn = driver.findElement(By.xpath("//button[text()='OK' or text()='Ok' or text()='ok']"));
+            okBtn.click();
+
+            System.out.println("Google password warning popup dismissed.");
+        } catch (Exception e) {
+            System.out.println("No Google password warning popup detected.");
+        }
+    }
+}

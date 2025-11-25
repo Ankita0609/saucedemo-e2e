@@ -1,0 +1,11 @@
+base\BaseTest.class
+pages\InventoryPage.class
+pages\CheckoutCompletePage.class
+pages\ProductPage.class
+pages\LoginPage.class
+pages\CartPage.class
+driver\DriverManager.class
+pages\CheckoutOverviewPage.class
+pages\CheckoutInfoPage.class
+utils\PopupHandler.class
+utils\TestUtil.class

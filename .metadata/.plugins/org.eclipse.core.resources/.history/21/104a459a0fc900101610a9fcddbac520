@@ -1,0 +1,6 @@
+baseUrl=https://www.saucedemo.com/
+browser=chrome
+implicitWait=10
+pageLoadTimeout=20
+username=standard_user
+password=secret_sauce

@@ -1,0 +1,56 @@
+package tests;
+
+import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.*;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class SauceDemoE2ETest extends BaseTest {
+
+    @Test
+    public void endToEndFlow() throws Exception {
+
+        Properties prop = new Properties();
+        prop.load(new FileInputStream("src/main/resources/config.properties"));
+
+        driver.get(prop.getProperty("url"));
+
+        // Login
+        LoginPage login = new LoginPage(driver);
+        login.login(prop.getProperty("username"), prop.getProperty("password"));
+
+        // dismiss popup right after login
+        dismissChromePopupIfPresent();
+
+        // Inventory
+        InventoryPage inv = new InventoryPage(driver);
+        inv.openBackpackPage();
+
+        // Product page
+        ProductPage product = new ProductPage(driver);
+        product.clickAddToCart();
+
+        // Cart
+        product.openCart();
+        CartPage cart = new CartPage(driver);
+        cart.clickCheckout();
+
+        // Checkout info
+        CheckoutInfoPage info = new CheckoutInfoPage(driver);
+        info.enterInfo(
+                prop.getProperty("firstname"),
+                prop.getProperty("lastname"),
+                prop.getProperty("zipcode")
+        );
+
+        // Overview
+        CheckoutOverviewPage overview = new CheckoutOverviewPage(driver);
+        overview.clickFinish();
+
+        // Complete
+        CheckoutCompletePage complete = new CheckoutCompletePage(driver);
+        Assert.assertTrue(complete.isOrderSuccess(), "Thank you message not found!!");
+    }
+}

@@ -1,0 +1,67 @@
+package base;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+public class BasePage {
+
+    protected WebDriver driver;
+    private final int defaultWait = 10; // seconds
+
+    public BasePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    /**
+     * Attempts to detect a generic "OK" button popup (password change or any alert-like modal),
+     * clicks OK if found, waits for it to disappear. If not present, continues silently.
+     */
+    public void handlePasswordPopupIfPresent() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        try {
+            // Try several locator patterns for an OK button text (case-insensitive-ish)
+            By[] okLocators = new By[] {
+                By.xpath("//button[normalize-space(text())='OK']"),
+                By.xpath("//button[normalize-space(text())='Ok']"),
+                By.xpath("//button[normalize-space(text())='ok']"),
+                By.xpath("//button[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'ok')]"),
+                // Some modals use input or anchor instead of button:
+                By.xpath("//input[@value='OK']"),
+                By.xpath("//button[contains(@class,'modal') and contains(text(),'OK')]")
+            };
+
+            WebElement okButton = null;
+            for (By loc : okLocators) {
+                try {
+                    okButton = wait.until(ExpectedConditions.elementToBeClickable(loc));
+                    if (okButton != null) break;
+                } catch (TimeoutException ignored) {
+                    // try next locator
+                }
+            }
+
+            if (okButton != null) {
+                okButton.click();
+                // wait until the popup/invisible element disappears
+                wait.until(ExpectedConditions.invisibilityOf(okButton));
+                System.out.println("Password change popup detected and OK clicked.");
+            } else {
+                System.out.println("Password popup not present (no OK button found).");
+            }
+        } catch (Exception e) {
+            // Fail-safe: don't break the test if popup handler itself errors.
+            System.out.println("Popup handler exception (ignored): " + e.getMessage());
+        }
+    }
+
+    public WebElement waitForVisible(By locator, int seconds) {
+        return new WebDriverWait(driver, Duration.ofSeconds(seconds))
+                .until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+}

@@ -1,0 +1,21 @@
+package driver;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class DriverManager {
+
+    public static WebDriver initializeDriver() {
+        WebDriverManager.edgedriver().setup();
+        EdgeOptions options = new EdgeOptions();
+        options.addArguments("--start-maximized");
+        // disable save-password bubble (attempt)
+        options.setExperimentalOption("prefs", java.util.Map.of(
+                "credentials_enable_service", false,
+                "profile.password_manager_enabled", false
+        ));
+        return new EdgeDriver(options);
+    }
+}

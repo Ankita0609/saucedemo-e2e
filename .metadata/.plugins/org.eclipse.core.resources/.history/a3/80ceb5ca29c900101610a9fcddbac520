@@ -1,0 +1,57 @@
+package base;
+
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+
+
+public class BaseTest {
+
+
+protected org.openqa.selenium.WebDriver driver;
+
+
+@BeforeMethod(alwaysRun = true)
+public void setUp() {
+String browser = PopupHandler.get("browser");
+boolean headless = Boolean.parseBoolean(PopupHandler.get("headless"));
+DriverManager.initDriver(browser, headless);
+driver = DriverManager.getDriver();
+
+
+// timeouts
+driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(
+Integer.parseInt(PopupHandler.get("implicitWait"))));
+driver.manage().timeouts().pageLoadTimeout(java.time.Duration.ofSeconds(
+Integer.parseInt(PopupHandler.get("pageLoadTimeout"))));
+
+
+driver.get(PopupHandler.get("baseUrl"));
+}
+
+
+/**
+* Last-resort Robot to click native Chrome password popup OK button at screen coords.
+* Coordinates tuned to your screenshot but may require slight adjustments on different machines.
+*/
+protected void clickNativeChromePasswordOk() {
+try {
+Robot robot = new Robot();
+Thread.sleep(1000);
+// coordinates - adjust if your display scaling differs
+robot.mouseMove(1080, 520);
+Thread.sleep(300);
+robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+System.out.println("Clicked native Chrome password popup OK");
+} catch (Exception e) {
+System.out.println("Robot click failed or not needed: " + e.getMessage());
+}
+}
+
+
+@AfterMethod(alwaysRun = true)
+public void tearDown() {
+DriverManager.quitDriver();
+}
+}

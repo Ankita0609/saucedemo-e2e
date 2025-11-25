@@ -1,0 +1,73 @@
+package utils;
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+/**
+ * PopupHandler:
+ *  - First tries to dismiss the native "Save your password?" using keyboard navigation:
+ *      TAB x N -> ENTER  (works when popup gets focus)
+ *  - If that fails, falls back to a coordinate click tuned for 1920x1080.
+ *
+ * NOTE: If your Windows scale is not 100% or Edge window is not full-screen,
+ * the coordinate fallback may need small adjustments.
+ */
+public class PopupHandler {
+
+    /**
+     * Presses Tab several times then Enter to select "Not now". If that doesn't appear to work,
+     * falls back to clicking a coordinate (1920x1080).
+     */
+    public static void clickNotNowOnSavePasswordPopup() {
+        try {
+            Robot robot = new Robot();
+            robot.setAutoDelay(150);
+
+            // Wait a short moment for popup to appear
+            Thread.sleep(800);
+
+            // Try keyboard navigation approach:
+            // On Edge Save-password popup, TAB usually focuses the dropdown or buttons.
+            // Press TAB 3 times then press ENTER (this selects "Not now" in most setups).
+            for (int i = 0; i < 3; i++) {
+                robot.keyPress(KeyEvent.VK_TAB);
+                robot.keyRelease(KeyEvent.VK_TAB);
+                Thread.sleep(120);
+            }
+            // Press Enter
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+
+            // Wait and allow popup to disappear
+            Thread.sleep(400);
+
+            System.out.println("PopupHandler: attempted keyboard dismiss (TAB x3 + ENTER).");
+
+            // Optional: we can check window state but Robot can't read DOM; assume success.
+            return;
+        } catch (Exception e) {
+            System.out.println("PopupHandler: keyboard attempt failed, will try coordinate click. err=" + e.getMessage());
+        }
+
+        // Fallback: coordinate click tuned for 1920x1080
+        try {
+            Robot robot = new Robot();
+            // Coordinates chosen for 1920x1080 with Edge window maximized.
+            // These target the "Not now" button area in your screenshot.
+            int x = 1520; // approximate horizontal pixel (adjust if needed)
+            int y = 150;  // approximate vertical pixel (adjust if needed)
+
+            // Move, click
+            robot.mouseMove(x, y);
+            Thread.sleep(150);
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+            System.out.println("PopupHandler: clicked coordinates (" + x + "," + y + ") as fallback.");
+            Thread.sleep(400);
+        } catch (Exception ex) {
+            System.out.println("PopupHandler: coordinate fallback also failed: " + ex.getMessage());
+        }
+    }
+}

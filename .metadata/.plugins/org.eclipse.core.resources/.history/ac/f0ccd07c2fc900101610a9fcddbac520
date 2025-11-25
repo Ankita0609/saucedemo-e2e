@@ -1,0 +1,50 @@
+package tests;
+
+import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import pages.*;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class SauceDemoE2ETest extends BaseTest {
+
+    @Test
+    public void endToEndFlow() throws Exception {
+        Properties prop = new Properties();
+        prop.load(new FileInputStream("src/main/resources/config.properties"));
+
+        driver.get(prop.getProperty("url"));
+
+        // 1. login
+        LoginPage login = new LoginPage(driver);
+        login.login(prop.getProperty("username"), prop.getProperty("password"));
+
+        // 2. close native popup if it appears (press ENTER)
+        handleNativePopupIfPresent();
+
+        // 3. click backpack, add to cart, open cart
+        InventoryPage inv = new InventoryPage(driver);
+        inv.clickBackpack();
+        inv.clickAddToCartFromProduct();
+        inv.openCart();
+
+        // 4. click checkout
+        pages.CartPage cart = new pages.CartPage(driver);
+        cart.clickCheckout();
+
+        // 5. fill info
+        CheckoutInfoPage info = new CheckoutInfoPage(driver);
+        info.enterInfo(prop.getProperty("firstname"), prop.getProperty("lastname"), prop.getProperty("zipcode"));
+
+        // 6. finish
+        CheckoutOverviewPage overview = new CheckoutOverviewPage(driver);
+        overview.clickFinish();
+
+        // 7. verify
+        CheckoutCompletePage complete = new CheckoutCompletePage(driver);
+        Assert.assertTrue(complete.isOrderSuccess(), "Order confirmation message not found.");
+
+        // test passed — browser will close in @AfterClass
+    }
+}

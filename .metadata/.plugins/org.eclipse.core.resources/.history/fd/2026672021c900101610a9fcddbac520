@@ -1,0 +1,83 @@
+package base;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
+import utils.ConfigReader;
+import utils.TestListener;
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
+public class BaseTest {
+
+    protected WebDriver driver;
+
+    @BeforeMethod
+    public void setUp() {
+
+        WebDriverManager.chromedriver().setup();
+
+        // 🔥 Disable Chrome password popups, bubbles & password manager
+        ChromeOptions options = new ChromeOptions();
+
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("credentials_enable_service", false);
+        prefs.put("profile.password_manager_enabled", false);
+        prefs.put("autofill.profile_enabled", false);
+        prefs.put("autofill.credit_card_enabled", false);
+
+        options.setExperimentalOption("prefs", prefs);
+        options.addArguments("--disable-save-password-bubble");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("--disable-features=PasswordManagerEnabled");
+
+        driver = new ChromeDriver(options);
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        driver.get(ConfigReader.getProperty("baseUrl"));
+    }
+
+    /**
+     * 🔥 UNIVERSAL HANDLER FOR CHROME NATIVE POPUPS
+     * Handles the Chrome “Change your password” popup by clicking "OK"
+     */
+    public void handleChromePasswordPopup() {
+        try {
+            Thread.sleep(1500); // Let popup appear
+            Robot robot = new Robot();
+
+            // 🔥 Coordinates are based on your screenshot (adjust if needed)
+            int okButtonX = 1080;  // approx horizontal location
+            int okButtonY = 520;   // approx vertical location
+
+            robot.mouseMove(okButtonX, okButtonY);
+            Thread.sleep(500);
+
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+            System.out.println("🔥 Chrome popup clicked successfully");
+
+        } catch (Exception e) {
+            System.out.println("✔ No Chrome password popup detected");
+        }
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}

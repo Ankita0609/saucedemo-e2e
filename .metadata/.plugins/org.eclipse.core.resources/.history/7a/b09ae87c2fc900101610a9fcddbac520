@@ -1,0 +1,28 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class InventoryPage {
+
+    private final WebDriver driver;
+    private final By backpackLink = By.id("item_4_title_link"); // link to backpack product
+    private final By addToCartBackpack = By.id("add-to-cart-sauce-labs-backpack");
+    private final By cartIcon = By.className("shopping_cart_link");
+
+    public InventoryPage(WebDriver driver) { this.driver = driver; }
+
+    public void clickBackpack() {
+        WebElement el = driver.findElement(backpackLink);
+        el.click();
+    }
+
+    public void clickAddToCartFromProduct() {
+        driver.findElement(addToCartBackpack).click();
+    }
+
+    public void openCart() {
+        driver.findElement(cartIcon).click();
+    }
+}
