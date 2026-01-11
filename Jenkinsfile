@@ -26,9 +26,9 @@ pipeline {
         failure {
             archiveArtifacts artifacts: 'screenshots/**/*.png', allowEmptyArchive: true
         }
+	always {
+    	    junit testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true
+	}
 
-        always {
-            junit 'target/surefire-reports/*.xml'
-        }
-    }
+               }
 }
