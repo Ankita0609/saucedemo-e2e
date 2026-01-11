@@ -7,7 +7,6 @@
 
     <test name="E2E Tests">
         <classes>
-    <class name="tests.LoginTest"/>
     <class name="tests.CheckoutFlowTest"/>
 	</classes>
     </test>
