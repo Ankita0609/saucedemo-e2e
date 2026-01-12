@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.myserver.com/job/saucedemo-e2e/badge/icon)](https://jenkins.myserver.com/job/saucedemo-e2e/)
+
 # 🧪 SauceDemo End-to-End Test Automation Framework
 
 A **production-style end-to-end UI automation framework** built using **Selenium + TestNG + Maven**, fully integrated with **Jenkins CI** and designed to run reliably in **headless environments**.
