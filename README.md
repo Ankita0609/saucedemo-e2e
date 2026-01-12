@@ -1,4 +1,5 @@
 [![Build Status](https://jenkins.myserver.com/job/saucedemo-e2e/badge/icon)](https://jenkins.myserver.com/job/saucedemo-e2e/)
+
 CI powered by Jenkins (local Windows setup). Pipeline and Jenkinsfile are production-ready.
 
 # 🧪 SauceDemo End-to-End Test Automation Framework
